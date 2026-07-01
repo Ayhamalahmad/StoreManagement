@@ -34,10 +34,12 @@ export function PerfumeCard({ perfume, onViewDetails }: Props) {
                 </div>
 
                 <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
-                        {perfume.gender?.[locale] ?? '-'}
-                    </div>
+                    {perfume.fragrance_categories?.length > 0 && (
+                        <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            {perfume.fragrance_categories.map((c) => c.name?.[locale]).filter(Boolean).join(', ') || '-'}
+                        </div>
+                    )}
                     <div className="flex items-center gap-2">
                         <Building2 className="h-4 w-4" />
                         {perfume.section ?? '-'}
@@ -48,11 +50,13 @@ export function PerfumeCard({ perfume, onViewDetails }: Props) {
                     </div>
                 </div>
 
-                {perfume.season?.[locale] && (
+                {perfume.seasons?.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">
-                            {perfume.season[locale]}
-                        </Badge>
+                        {perfume.seasons.map((s) => (
+                            <Badge key={s.id} variant="secondary">
+                                {s.name?.[locale] ?? s.slug}
+                            </Badge>
+                        ))}
                     </div>
                 )}
 

@@ -1,3 +1,6 @@
+import type { Season } from '@/features/Seasons/types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
+
 export interface Perfume {
     id: number;
     name: Record<string, string>;
@@ -5,11 +8,11 @@ export interface Perfume {
     original_perfume: Record<string, string> | null;
     image: string | null;
     image_url: string | null;
-    gender: Record<string, string>;
+    seasons: Season[];
+    fragrance_categories: FragranceCategory[];
     family: Record<string, string> | null;
     shelf: string | null;
     section: string | null;
-    season: Record<string, string> | null;
     notes: Record<string, string> | null;
     top_notes: Record<string, string> | null;
     middle_notes: Record<string, string> | null;
@@ -27,11 +30,9 @@ export interface PerfumeFormData {
     original_perfume: Record<string, string>;
     image: File | null;
     imagePreview: string;
-    gender: Record<string, string>;
     family: Record<string, string>;
     shelf: string;
     section: string;
-    season: Record<string, string>;
     notes: Record<string, string>;
     top_notes: Record<string, string>;
     middle_notes: Record<string, string>;
@@ -40,4 +41,6 @@ export interface PerfumeFormData {
     concentration: Record<string, string>;
     sillage: Record<string, string>;
     price: string;
+    season_ids: number[];
+    fragrance_category_ids: number[];
 }

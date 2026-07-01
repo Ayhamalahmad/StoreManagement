@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\FragranceCategory;
 use App\Models\Perfume;
+use App\Models\Season;
 use Illuminate\Database\Seeder;
 
 class PerfumeSeeder extends Seeder
@@ -88,8 +90,39 @@ class PerfumeSeeder extends Seeder
             ['code' => 'BL-002', 'name' => 'Chanel Platinum Égoïste', 'original_perfume' => 'Chanel Platinum Égoïste', 'gender' => 'Erkek', 'family' => 'Fresh', 'shelf' => 'Shelf 02', 'section' => 'Section A', 'season' => 'Summer', 'notes' => 'Clean lavender and rosemary', 'top_notes' => 'Lavender, Rosemary, Bergamot', 'middle_notes' => 'Geranium, Clary Sage, Jasmine', 'base_notes' => 'Sandalwood, Cedar, Oakmoss', 'warehouse' => 'Warehouse 2', 'concentration' => 'Eau de Toilette', 'sillage' => 'Moderate', 'price' => 135.00],
         ];
 
+        $seasonMap = [
+            'Summer' => 'summer',
+            'Autumn' => 'autumn',
+            'Spring' => 'spring',
+            'Winter' => 'winter',
+        ];
+
+        $genderMap = [
+            'Erkek' => 'erkek',
+            'Kadın' => 'kadin',
+            'Unisex' => 'unisex',
+        ];
+
         foreach ($perfumes as $perfume) {
-            Perfume::create($perfume);
+            $seasonSlug = $seasonMap[$perfume['season']] ?? null;
+            $genderSlug = $genderMap[$perfume['gender']] ?? null;
+            unset($perfume['gender'], $perfume['season']);
+
+            $created = Perfume::create($perfume);
+
+            if ($seasonSlug) {
+                $season = Season::where('slug', $seasonSlug)->first();
+                if ($season) {
+                    $created->seasons()->attach($season);
+                }
+            }
+
+            if ($genderSlug) {
+                $category = FragranceCategory::where('slug', $genderSlug)->first();
+                if ($category) {
+                    $created->fragranceCategories()->attach($category);
+                }
+            }
         }
     }
 }

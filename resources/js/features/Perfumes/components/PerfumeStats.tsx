@@ -12,13 +12,13 @@ export function PerfumeStats({ perfumes }: Props) {
     const stats = {
         total: perfumes.length,
         men: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /erkek|male|ذكر/i.test(v))
+            p.fragrance_categories?.some((c) => /erkek|male|ذكر/i.test(c.slug ?? '') || /erkek|male|ذكر/i.test(Object.values(c.name ?? {}).join(' ')))
         ).length,
         women: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /kadın|female|أنثى/i.test(v))
+            p.fragrance_categories?.some((c) => /kadin|female|أنثى/i.test(c.slug ?? '') || /kadın|female|أنثى/i.test(Object.values(c.name ?? {}).join(' ')))
         ).length,
         niche: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /unisex|uniseks|للجنسين/i.test(v))
+            p.fragrance_categories?.some((c) => c.type === 'niche')
         ).length,
     };
 

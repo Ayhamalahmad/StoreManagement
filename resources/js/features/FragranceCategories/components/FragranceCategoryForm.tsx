@@ -2,10 +2,11 @@ import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
-import type { FormEventHandler } from 'react';
+import { type FormEventHandler, useEffect } from 'react';
 import type { FragranceCategory, FragranceCategoryFormData } from '../types';
 
 interface Props {
@@ -25,6 +26,18 @@ export function FragranceCategoryForm({ open, onOpenChange, editingCategory }: P
         type: 'frequency',
         slug: '',
     });
+
+    useEffect(() => {
+        if (open && editingCategory) {
+            setData({
+                name: editingCategory.name ?? { en: '', tr: '', ar: '' },
+                type: editingCategory.type ?? 'frequency',
+                slug: editingCategory.slug ?? '',
+            });
+        } else if (open) {
+            reset();
+        }
+    }, [open, editingCategory]);
 
     const handleOpenChange = (o: boolean) => {
         if (!o) reset();
@@ -68,11 +81,18 @@ export function FragranceCategoryForm({ open, onOpenChange, editingCategory }: P
                     </div>
                     <div className="space-y-1">
                         <Label htmlFor="type">{t('field.type')} *</Label>
-                        <Input
-                            id="type"
+                        <Select
                             value={data.type}
-                            onChange={(e) => setData('type', e.target.value)}
-                        />
+                            onValueChange={(value) => setData('type', value)}
+                        >
+                            <SelectTrigger id="type">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="frequency">Frequency</SelectItem>
+                                <SelectItem value="niche">Niche</SelectItem>
+                            </SelectContent>
+                        </Select>
                         {errors.type && <p className="text-sm text-destructive">{errors.type}</p>}
                     </div>
                     <div className="space-y-1">

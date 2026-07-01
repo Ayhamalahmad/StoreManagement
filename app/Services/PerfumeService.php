@@ -11,12 +11,12 @@ class PerfumeService
 {
     public function getAll()
     {
-        return Perfume::orderBy('created_at', 'desc')->get();
+        return Perfume::with(['seasons', 'fragranceCategories'])->orderBy('created_at', 'desc')->get();
     }
 
     public function getBrowseData()
     {
-        return Perfume::orderBy('created_at', 'desc')->get();
+        return Perfume::with(['seasons', 'fragranceCategories'])->orderBy('created_at', 'desc')->get();
     }
 
     public function create(array $data, ?UploadedFile $image = null): Perfume
@@ -26,7 +26,21 @@ class PerfumeService
                 $data['image'] = $image->store('perfumes', 'public');
             }
 
-            return Perfume::create($data);
+            $seasonIds = $data['season_ids'] ?? [];
+            $fragranceCategoryIds = $data['fragrance_category_ids'] ?? [];
+            unset($data['season_ids'], $data['fragrance_category_ids']);
+
+            $perfume = Perfume::create($data);
+
+            if (!empty($seasonIds)) {
+                $perfume->seasons()->sync($seasonIds);
+            }
+
+            if (!empty($fragranceCategoryIds)) {
+                $perfume->fragranceCategories()->sync($fragranceCategoryIds);
+            }
+
+            return $perfume->load(['seasons', 'fragranceCategories']);
         });
     }
 
@@ -40,7 +54,16 @@ class PerfumeService
                 $data['image'] = $image->store('perfumes', 'public');
             }
 
-            return $perfume->update($data);
+            $seasonIds = $data['season_ids'] ?? [];
+            $fragranceCategoryIds = $data['fragrance_category_ids'] ?? [];
+            unset($data['season_ids'], $data['fragrance_category_ids']);
+
+            $result = $perfume->update($data);
+
+            $perfume->seasons()->sync($seasonIds);
+            $perfume->fragranceCategories()->sync($fragranceCategoryIds);
+
+            return $result;
         });
     }
 
@@ -50,6 +73,9 @@ class PerfumeService
             if ($perfume->image) {
                 Storage::disk('public')->delete($perfume->image);
             }
+
+            $perfume->seasons()->detach();
+            $perfume->fragranceCategories()->detach();
 
             return $perfume->delete();
         });

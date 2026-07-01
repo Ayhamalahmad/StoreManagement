@@ -29,7 +29,8 @@ export default function PerfumeShow({ perfume }: PageProps) {
     );
 
     return (
-
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={perfume.name?.[locale] ?? perfume.code} />
             <div className="container mx-auto space-y-6 p-6">
                 <div className="flex items-center gap-4">
                     <Link href={route('perfumes.index')}>
@@ -77,9 +78,9 @@ export default function PerfumeShow({ perfume }: PageProps) {
                                 <DetailRow label={t('field.name')} value={perfume.name?.[locale] ?? '-'} />
                                 <DetailRow label={t('field.code')} value={perfume.code} />
                                 <DetailRow label={t('field.original_perfume')} value={perfume.original_perfume?.[locale] ?? null} />
-                                <DetailRow label={t('field.gender')} value={perfume.gender?.[locale] ?? null} />
+                                <DetailRow label={t('field.fragrance_categories')} value={perfume.fragrance_categories?.map((c) => c.name?.[locale]).filter(Boolean).join(', ') ?? null} />
                                 <DetailRow label={t('field.family')} value={perfume.family?.[locale] ?? null} />
-                                <DetailRow label={t('field.season')} value={perfume.season?.[locale] ?? null} />
+                                <DetailRow label={t('field.seasons')} value={perfume.seasons?.map((s) => s.name?.[locale]).filter(Boolean).join(', ') ?? null} />
                                 <DetailRow label={t('field.concentration')} value={perfume.concentration?.[locale] ?? null} />
                                 <DetailRow label={t('field.sillage')} value={perfume.sillage?.[locale] ?? null} />
                             </CardContent>
@@ -145,5 +146,6 @@ export default function PerfumeShow({ perfume }: PageProps) {
                     </div>
                 </div>
             </div>
+        </AppLayout>
     );
 }

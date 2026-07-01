@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\FragranceCategory;
 use App\Models\Perfume;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PerfumeFactory extends Factory
@@ -11,9 +13,6 @@ class PerfumeFactory extends Factory
 
     public function definition(): array
     {
-        $genders = ['Erkek', 'Kadın', 'Unisex'];
-        $gender = $this->faker->randomElement($genders);
-
         return [
             'name' => [
                 'en' => $this->faker->unique()->words(3, true) . ' Perfume',
@@ -27,11 +26,6 @@ class PerfumeFactory extends Factory
                 'ar' => $this->faker->company() . ' ' . $this->faker->word(),
             ],
             'image' => null,
-            'gender' => [
-                'en' => $gender,
-                'tr' => $gender,
-                'ar' => $gender === 'Erkek' ? 'ذكر' : ($gender === 'Kadın' ? 'أنثى' : 'للجنسين'),
-            ],
             'family' => [
                 'en' => $this->faker->randomElement(['Fresh', 'Oriental', 'Woody', 'Floral', 'Citrus', 'Green', 'Leather']),
                 'tr' => $this->faker->randomElement(['Taze', 'Oryantal', 'Odunsu', 'Çiçeksi', 'Narenciye', 'Yeşil', 'Deri']),
@@ -39,11 +33,6 @@ class PerfumeFactory extends Factory
             ],
             'shelf' => $this->faker->randomElement(['Shelf 01', 'Shelf 02', 'Shelf 03', 'Shelf 04', 'Shelf 05']),
             'section' => $this->faker->randomElement(['Section A', 'Section B', 'Section C', 'Section D']),
-            'season' => [
-                'en' => $this->faker->randomElement(['Summer', 'Autumn', 'Spring', 'Winter']),
-                'tr' => $this->faker->randomElement(['Yaz', 'Sonbahar', 'İlkbahar', 'Kış']),
-                'ar' => $this->faker->randomElement(['الصيف', 'الخريف', 'الربيع', 'الشتاء']),
-            ],
             'notes' => [
                 'en' => $this->faker->sentence(5),
                 'tr' => $this->faker->sentence(5),
@@ -77,5 +66,21 @@ class PerfumeFactory extends Factory
             ],
             'price' => $this->faker->randomFloat(2, 30, 500),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Perfume $perfume) {
+            $season = Season::inRandomOrder()->first();
+            $category = FragranceCategory::inRandomOrder()->first();
+
+            if ($season) {
+                $perfume->seasons()->attach($season);
+            }
+
+            if ($category) {
+                $perfume->fragranceCategories()->attach($category);
+            }
+        });
     }
 }

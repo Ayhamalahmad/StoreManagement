@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,11 +17,9 @@ class Perfume extends Model
         'code',
         'original_perfume',
         'image',
-        'gender',
         'family',
         'shelf',
         'section',
-        'season',
         'notes',
         'top_notes',
         'middle_notes',
@@ -38,9 +37,7 @@ class Perfume extends Model
         return [
             'name' => 'array',
             'original_perfume' => 'array',
-            'gender' => 'array',
             'family' => 'array',
-            'season' => 'array',
             'notes' => 'array',
             'top_notes' => 'array',
             'middle_notes' => 'array',
@@ -58,5 +55,15 @@ class Perfume extends Model
         }
 
         return Storage::disk('public')->url($this->image);
+    }
+
+    public function seasons(): BelongsToMany
+    {
+        return $this->belongsToMany(Season::class);
+    }
+
+    public function fragranceCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(FragranceCategory::class);
     }
 }

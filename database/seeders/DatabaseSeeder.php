@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            SeasonSeeder::class,
+            FragranceCategorySeeder::class,
             PerfumeSeeder::class,
             OilSeeder::class,
         ]);

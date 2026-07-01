@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\FragranceCategory;
 use App\Models\Perfume;
+use App\Models\Season;
 use App\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
+    $this->seed([SeasonSeeder::class, FragranceCategorySeeder::class]);
 });
 
 test('guests cannot view perfumes manage page', function () {
@@ -51,10 +54,12 @@ test('authenticated users can view a single perfume', function () {
 test('user can create a perfume', function () {
     $this->actingAs($this->user);
 
+    $category = FragranceCategory::where('slug', 'unisex')->first();
+
     $data = [
         'name' => ['en' => 'Test Perfume', 'tr' => 'Test Parfüm', 'ar' => 'عطر تجريبي'],
         'code' => 'TEST-001',
-        'gender' => ['en' => 'Unisex', 'tr' => 'Uniseks', 'ar' => 'للجنسين'],
+        'fragrance_category_ids' => $category ? [$category->id] : [],
     ];
 
     $this->post(route('perfumes.store'), $data)
@@ -71,7 +76,6 @@ test('user can update a perfume', function () {
     $this->put(route('perfumes.update', $perfume), [
         'name' => ['en' => 'Updated', 'tr' => 'Güncellendi', 'ar' => 'محدث'],
         'code' => $perfume->code,
-        'gender' => ['en' => 'Erkek', 'tr' => 'Erkek', 'ar' => 'ذكر'],
     ])->assertRedirect(route('perfumes.manage'));
 
     expect($perfume->fresh()->name['en'])->toBe('Updated');
@@ -95,7 +99,6 @@ test('perfume code must be unique', function () {
         ->post(route('perfumes.store'), [
             'name' => ['en' => 'Test', 'tr' => 'Test', 'ar' => 'اختبار'],
             'code' => 'DUP-001',
-            'gender' => ['en' => 'Unisex', 'tr' => 'Uniseks', 'ar' => 'للجنسين'],
         ])
         ->assertSessionHasErrors('code');
 });

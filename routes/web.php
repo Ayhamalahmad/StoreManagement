@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\FragranceCategoryController;
 use App\Http\Controllers\OilController;
 use App\Http\Controllers\PerfumeController;
+use App\Http\Controllers\SeasonController;
 use App\Models\Oil;
 use App\Models\Perfume;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('oils', [OilController::class, 'store'])->name('oils.store');
     Route::put('oils/{oil}', [OilController::class, 'update'])->name('oils.update');
     Route::delete('oils/{oil}', [OilController::class, 'destroy'])->name('oils.destroy');
+
+    Route::get('seasons', [SeasonController::class, 'index'])->name('seasons.index');
+    Route::post('seasons', [SeasonController::class, 'store'])->name('seasons.store');
+    Route::put('seasons/{season}', [SeasonController::class, 'update'])->name('seasons.update');
+    Route::delete('seasons/{season}', [SeasonController::class, 'destroy'])->name('seasons.destroy');
+
+    Route::get('fragrance-categories', [FragranceCategoryController::class, 'index'])->name('fragrance-categories.index');
+    Route::post('fragrance-categories', [FragranceCategoryController::class, 'store'])->name('fragrance-categories.store');
+    Route::put('fragrance-categories/{fragranceCategory}', [FragranceCategoryController::class, 'update'])->name('fragrance-categories.update');
+    Route::delete('fragrance-categories/{fragranceCategory}', [FragranceCategoryController::class, 'destroy'])->name('fragrance-categories.destroy');
 });
 
 require __DIR__.'/settings.php';

@@ -1,5 +1,7 @@
 import { useForm } from '@inertiajs/react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -8,21 +10,25 @@ import { type FormEventHandler, useEffect, useRef } from 'react';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/types';
 import type { Perfume, PerfumeFormData } from '../types';
+import type { Season } from '@/features/Seasons/types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     editingPerfume: Perfume | null;
     visibleFields: Set<string>;
+    seasons: Season[];
+    fragranceCategories: FragranceCategory[];
 }
 
-const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'gender', 'family', 'shelf', 'section', 'season', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
+const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
 
 const localeFlags: Record<Locale, string> = { en: 'EN', tr: 'TR', ar: 'AR' };
 const locales: Locale[] = ['en', 'tr', 'ar'];
 const makeLocaleObj = (): Record<string, string> => ({ en: '', tr: '', ar: '' });
 
-export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields }: Props) {
+export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields, seasons, fragranceCategories }: Props) {
     const { t, locale } = useLanguage();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,11 +38,9 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
         original_perfume: makeLocaleObj(),
         image: null,
         imagePreview: '',
-        gender: makeLocaleObj(),
         family: makeLocaleObj(),
         shelf: '',
         section: '',
-        season: makeLocaleObj(),
         notes: makeLocaleObj(),
         top_notes: makeLocaleObj(),
         middle_notes: makeLocaleObj(),
@@ -45,6 +49,8 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
         concentration: makeLocaleObj(),
         sillage: makeLocaleObj(),
         price: '',
+        season_ids: [],
+        fragrance_category_ids: [],
     });
 
     useEffect(() => {
@@ -55,11 +61,9 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
                 original_perfume: editingPerfume.original_perfume ?? makeLocaleObj(),
                 image: null,
                 imagePreview: '',
-                gender: editingPerfume.gender ?? makeLocaleObj(),
                 family: editingPerfume.family ?? makeLocaleObj(),
                 shelf: editingPerfume.shelf ?? '',
                 section: editingPerfume.section ?? '',
-                season: editingPerfume.season ?? makeLocaleObj(),
                 notes: editingPerfume.notes ?? makeLocaleObj(),
                 top_notes: editingPerfume.top_notes ?? makeLocaleObj(),
                 middle_notes: editingPerfume.middle_notes ?? makeLocaleObj(),
@@ -68,6 +72,8 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
                 concentration: editingPerfume.concentration ?? makeLocaleObj(),
                 sillage: editingPerfume.sillage ?? makeLocaleObj(),
                 price: editingPerfume.price?.toString() ?? '',
+                season_ids: editingPerfume.seasons?.map((s) => s.id) ?? [],
+                fragrance_category_ids: editingPerfume.fragrance_categories?.map((c) => c.id) ?? [],
             });
         } else if (open) {
             reset();
@@ -173,13 +179,6 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
                                 )}
                             </div>
                         )}
-                        {visibleFields.has('gender') && (
-                            <div className="space-y-1 sm:col-span-2">
-                                <Label>{getFieldLabel('gender')} *</Label>
-                                {renderLocaleInputs('gender', true)}
-                                {errors.gender && <p className="text-sm text-destructive">{errors.gender}</p>}
-                            </div>
-                        )}
                         {visibleFields.has('family') && (
                             <div className="space-y-1 sm:col-span-2">
                                 <Label>{getFieldLabel('family')}</Label>
@@ -198,10 +197,53 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields 
                                 <Input id="shelf" value={data.shelf} onChange={(e) => setData('shelf', e.target.value)} />
                             </div>
                         )}
-                        {visibleFields.has('season') && (
-                            <div className="space-y-1 sm:col-span-2">
-                                <Label>{getFieldLabel('season')}</Label>
-                                {renderLocaleInputs('season')}
+                        {visibleFields.has('fragrance_categories') && (
+                            <div className="space-y-2 sm:col-span-2">
+                                <Label>{t('field.fragrance_categories')}</Label>
+                                <div className="flex flex-wrap gap-3">
+                                    {fragranceCategories.map((cat) => (
+                                        <label key={cat.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                            <Checkbox
+                                                checked={data.fragrance_category_ids.includes(cat.id)}
+                                                onCheckedChange={(checked) => {
+                                                    setData('fragrance_category_ids',
+                                                        checked
+                                                            ? [...data.fragrance_category_ids, cat.id]
+                                                            : data.fragrance_category_ids.filter((id) => id !== cat.id)
+                                                    );
+                                                }}
+                                            />
+                                            <div>
+                                                <span>{cat.name?.[locale] ?? cat.slug}</span>
+                                                <Badge variant="outline" className="ml-1 text-xs">{cat.type}</Badge>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.fragrance_category_ids && <p className="text-sm text-destructive">{errors.fragrance_category_ids}</p>}
+                            </div>
+                        )}
+                        {visibleFields.has('seasons') && (
+                            <div className="space-y-2 sm:col-span-2">
+                                <Label>{t('field.seasons')}</Label>
+                                <div className="flex flex-wrap gap-3">
+                                    {seasons.map((season) => (
+                                        <label key={season.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                            <Checkbox
+                                                checked={data.season_ids.includes(season.id)}
+                                                onCheckedChange={(checked) => {
+                                                    setData('season_ids',
+                                                        checked
+                                                            ? [...data.season_ids, season.id]
+                                                            : data.season_ids.filter((id) => id !== season.id)
+                                                    );
+                                                }}
+                                            />
+                                            <span>{season.name?.[locale] ?? season.slug}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.season_ids && <p className="text-sm text-destructive">{errors.season_ids}</p>}
                             </div>
                         )}
                         {visibleFields.has('warehouse') && (

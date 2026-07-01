@@ -11,16 +11,20 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { PerfumeStats, PerfumeTable, PerfumeForm } from '@/features/Perfumes';
 import type { Perfume } from '@/features/Perfumes/types';
+import type { Season } from '@/features/Seasons/types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
 
 interface PageProps {
     perfumes: Perfume[];
+    seasons: Season[];
+    fragranceCategories: FragranceCategory[];
     [key: string]: unknown;
 }
 
-const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'gender', 'family', 'shelf', 'section', 'season', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
+const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
 
 export default function PerfumesManage() {
-    const { perfumes } = usePage<PageProps>().props;
+    const { perfumes, seasons, fragranceCategories } = usePage<PageProps>().props;
     const { t, locale } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.perfumes'), href: '/perfumes' },
@@ -67,11 +71,11 @@ export default function PerfumesManage() {
             p.code, p.section, p.shelf, p.warehouse,
             ...Object.values(p.name ?? {}),
             ...Object.values(p.original_perfume ?? {}),
-            ...Object.values(p.gender ?? {}),
             ...Object.values(p.family ?? {}),
-            ...Object.values(p.season ?? {}),
             ...Object.values(p.concentration ?? {}),
             ...Object.values(p.sillage ?? {}),
+            ...(p.seasons?.flatMap((s) => Object.values(s.name ?? {})) ?? []),
+            ...(p.fragrance_categories?.flatMap((c) => Object.values(c.name ?? {})) ?? []),
         ];
         return searchable.some((val) => val?.toLowerCase().includes(searchStr));
     });
@@ -137,6 +141,8 @@ export default function PerfumesManage() {
                 onOpenChange={(o) => { setIsAddOpen(o); if (!o) setEditingPerfume(null); }}
                 editingPerfume={editingPerfume}
                 visibleFields={visibleFields}
+                seasons={seasons}
+                fragranceCategories={fragranceCategories}
             />
 
             <Dialog open={!!deletingPerfume} onOpenChange={(o) => !o && setDeletingPerfume(null)}>

@@ -27,7 +27,7 @@ export function PerfumeTable({ perfumes, visibleFields, onEdit, onDelete }: Prop
                             <tr className="border-b text-left text-muted-foreground">
                                 <th className="px-4 py-3 font-medium">{t('field.code')}</th>
                                 <th className="px-4 py-3 font-medium">{t('field.name')}</th>
-                                {['top_notes', 'middle_notes', 'base_notes', 'gender', 'family', 'section', 'shelf', 'season', 'concentration', 'sillage', 'price', 'warehouse'].filter((f) => visibleFields.has(f)).map((field) => (
+                                {['top_notes', 'middle_notes', 'base_notes', 'fragrance_categories', 'family', 'section', 'shelf', 'seasons', 'concentration', 'sillage', 'price', 'warehouse'].filter((f) => visibleFields.has(f)).map((field) => (
                                     <th key={field} className="px-4 py-3 font-medium">{t(`field.${field}`)}</th>
                                 ))}
                                 <th className="px-4 py-3 font-medium text-right">{t('perfume.manage')}</th>
@@ -50,13 +50,19 @@ export function PerfumeTable({ perfumes, visibleFields, onEdit, onDelete }: Prop
                                         {visibleFields.has('top_notes') && <td className="px-4 py-3 text-muted-foreground">{perfume.top_notes?.[locale] || '-'}</td>}
                                         {visibleFields.has('middle_notes') && <td className="px-4 py-3 text-muted-foreground">{perfume.middle_notes?.[locale] || '-'}</td>}
                                         {visibleFields.has('base_notes') && <td className="px-4 py-3 text-muted-foreground">{perfume.base_notes?.[locale] || '-'}</td>}
-                                        {visibleFields.has('gender') && <td className="px-4 py-3">{perfume.gender?.[locale] || '-'}</td>}
+                                        {visibleFields.has('fragrance_categories') && (
+                                            <td className="px-4 py-3">
+                                                {perfume.fragrance_categories?.length > 0
+                                                    ? perfume.fragrance_categories.map((c) => c.name?.[locale]).filter(Boolean).join(', ')
+                                                    : '-'}
+                                            </td>
+                                        )}
                                         {visibleFields.has('family') && <td className="px-4 py-3 text-muted-foreground">{perfume.family?.[locale] || '-'}</td>}
                                         {visibleFields.has('section') && <td className="px-4 py-3 text-muted-foreground">{perfume.section || '-'}</td>}
                                         {visibleFields.has('shelf') && <td className="px-4 py-3 text-muted-foreground">{perfume.shelf || '-'}</td>}
-                                        {visibleFields.has('season') && (
+                                        {visibleFields.has('seasons') && (
                                             <td className="px-4 py-3">
-                                                {perfume.season?.[locale] && <Badge variant="outline">{perfume.season[locale]}</Badge>}
+                                                {perfume.seasons?.map((s) => s.name?.[locale]).filter(Boolean).join(', ') || '-'}
                                             </td>
                                         )}
                                         {visibleFields.has('concentration') && <td className="px-4 py-3 text-muted-foreground">{perfume.concentration?.[locale] || '-'}</td>}

@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,12 +9,17 @@ import { useLanguage } from '@/hooks/use-language';
 import { useState } from 'react';
 import { PerfumeCard, PerfumeFilters } from '@/features/Perfumes';
 import type { Perfume } from '@/features/Perfumes/types';
+import type { Season } from '@/features/Seasons/types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
 
 interface PageProps {
     perfumes: Perfume[];
+    seasons: Season[];
+    fragranceCategories: FragranceCategory[];
 }
 
-export default function PerfumesIndex({ perfumes }: PageProps) {
+export default function PerfumesIndex() {
+    const { perfumes, seasons, fragranceCategories } = usePage<PageProps>().props;
     const { t } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('perfume.browse'), href: '/perfumes' },
@@ -25,18 +30,19 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
     const stats = {
         total: perfumes.length,
         men: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /erkek|male|ذكر/i.test(v))
+            p.fragrance_categories?.some((c) => /erkek|male|ذكر/i.test(c.slug ?? ''))
         ).length,
         women: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /kadın|female|أنثى/i.test(v))
+            p.fragrance_categories?.some((c) => /kadin|female|أنثى/i.test(c.slug ?? ''))
         ).length,
         niche: perfumes.filter((p) =>
-            Object.values(p.gender ?? {}).some((v) => /unisex|uniseks|للجنسين/i.test(v))
+            p.fragrance_categories?.some((c) => c.type === 'niche')
         ).length,
     };
 
     return (
-
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title={t('perfume.browse')} />
             <div className="container mx-auto space-y-6 p-6">
 
 
@@ -45,6 +51,8 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
                     onSearchChange={setSearch}
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
+                    fragranceCategories={fragranceCategories}
+                    seasons={seasons}
                 />
 
                 
@@ -82,5 +90,6 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
                     </Button>
                 </div>
             </div>
+        </AppLayout>
     );
 }

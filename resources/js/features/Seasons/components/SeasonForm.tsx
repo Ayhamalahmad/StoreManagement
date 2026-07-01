@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
-import type { FormEventHandler } from 'react';
+import { type FormEventHandler, useEffect } from 'react';
 import type { Season, SeasonFormData } from '../types';
 
 interface Props {
@@ -24,6 +24,17 @@ export function SeasonForm({ open, onOpenChange, editingSeason }: Props) {
         name: { en: '', tr: '', ar: '' },
         slug: '',
     });
+
+    useEffect(() => {
+        if (open && editingSeason) {
+            setData({
+                name: editingSeason.name ?? { en: '', tr: '', ar: '' },
+                slug: editingSeason.slug ?? '',
+            });
+        } else if (open) {
+            reset();
+        }
+    }, [open, editingSeason]);
 
     const handleOpenChange = (o: boolean) => {
         if (!o) reset();

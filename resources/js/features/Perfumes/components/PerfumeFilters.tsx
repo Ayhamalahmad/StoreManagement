@@ -6,23 +6,39 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLanguage, type Locale } from '@/hooks/use-language';
 import { Check, Globe, Search } from 'lucide-react';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
+import type { Season } from '@/features/Seasons/types';
 
 interface Props {
     search: string;
     onSearchChange: (value: string) => void;
     activeTab: string;
     onTabChange: (value: string) => void;
+    fragranceCategories: FragranceCategory[];
+    seasons: Season[];
 }
 
-const genderTabValues = ['all', 'erkek', 'kadin', 'unisex', 'niche', 'oil'];
+const baseTabValues = ['all', 'oil'];
 
-export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange }: Props) {
+const seasonIcons: Record<string, string> = {
+    summer: '☀️',
+    autumn: '🍂',
+    spring: '🌸',
+    winter: '❄️',
+};
+
+export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange, fragranceCategories, seasons }: Props) {
     const { t, locale, setLocale } = useLanguage();
 
     const locales: { value: Locale; label: string }[] = [
         { value: 'en', label: 'English' },
         { value: 'tr', label: 'Türkçe' },
         { value: 'ar', label: 'العربية' },
+    ];
+
+    const tabs = [
+        ...baseTabValues,
+        ...fragranceCategories.map((c) => c.slug),
     ];
 
     return (
@@ -61,7 +77,7 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
 
             <Tabs defaultValue={activeTab} onValueChange={onTabChange}>
                 <TabsList className="h-auto w-full justify-start overflow-x-auto">
-                    {genderTabValues.map((tab) => (
+                    {tabs.map((tab) => (
                         <TabsTrigger key={tab} value={tab}>
                             {t(`perfume.${tab}_tab`)}
                         </TabsTrigger>
@@ -71,18 +87,11 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
 
             <div className="flex flex-wrap gap-2">
                 <Badge className="cursor-pointer">{t('perfume.filter_all')}</Badge>
-                <Badge variant="secondary" className="cursor-pointer">
-                    ☀️ {t('perfume.filter_summer')}
-                </Badge>
-                <Badge variant="secondary" className="cursor-pointer">
-                    🍂 {t('perfume.filter_autumn')}
-                </Badge>
-                <Badge variant="secondary" className="cursor-pointer">
-                    🌸 {t('perfume.filter_spring')}
-                </Badge>
-                <Badge variant="secondary" className="cursor-pointer">
-                    ❄️ {t('perfume.filter_winter')}
-                </Badge>
+                {seasons.map((season) => (
+                    <Badge key={season.id} variant="secondary" className="cursor-pointer">
+                        {seasonIcons[season.slug] ?? ''} {season.name?.[locale] ?? season.slug}
+                    </Badge>
+                ))}
             </div>
         </div>
     );
