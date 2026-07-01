@@ -11,16 +11,18 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { OilStats, OilTable, OilForm } from '@/features/Oils';
 import type { Oil } from '@/features/Oils/types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
 
 interface PageProps {
     oils: Oil[];
+    fragranceCategories: FragranceCategory[];
     [key: string]: unknown;
 }
 
 const fieldKeys = ['name', 'code', 'image', 'category', 'brand', 'volume', 'price', 'shelf', 'section', 'warehouse', 'notes', 'supplier'];
 
 export default function OilsManage() {
-    const { oils } = usePage<PageProps>().props;
+    const { oils, fragranceCategories } = usePage<PageProps>().props;
     const { t, locale } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.oils'), href: '/oils' },
@@ -133,6 +135,7 @@ export default function OilsManage() {
                 onOpenChange={(o) => { setIsAddOpen(o); if (!o) setEditingOil(null); }}
                 editingOil={editingOil}
                 visibleFields={visibleFields}
+                fragranceCategories={fragranceCategories}
             />
 
             <Dialog open={!!deletingOil} onOpenChange={(o) => !o && setDeletingOil(null)}>

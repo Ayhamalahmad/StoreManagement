@@ -2,18 +2,21 @@ import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Upload } from 'lucide-react';
 import { type FormEventHandler, useEffect, useRef } from 'react';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/types';
 import type { Oil, OilFormData } from '../types';
+import type { FragranceCategory } from '@/features/FragranceCategories/types';
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     editingOil: Oil | null;
     visibleFields: Set<string>;
+    fragranceCategories: FragranceCategory[];
 }
 
 const fieldKeys = ['name', 'code', 'image', 'category', 'brand', 'volume', 'price', 'shelf', 'section', 'warehouse', 'notes', 'supplier'];
@@ -22,9 +25,11 @@ const localeFlags: Record<Locale, string> = { en: 'EN', tr: 'TR', ar: 'AR' };
 const locales: Locale[] = ['en', 'tr', 'ar'];
 const makeLocaleObj = (): Record<string, string> => ({ en: '', tr: '', ar: '' });
 
-export function OilForm({ open, onOpenChange, editingOil, visibleFields }: Props) {
+export function OilForm({ open, onOpenChange, editingOil, visibleFields, fragranceCategories }: Props) {
     const { t, locale } = useLanguage();
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const oilCategories = fragranceCategories.filter((c) => c.type === 'oil');
 
     const { data, setData, post, put, errors, processing, reset } = useForm<OilFormData>({
         name: makeLocaleObj(),
@@ -158,9 +163,32 @@ export function OilForm({ open, onOpenChange, editingOil, visibleFields }: Props
                             </div>
                         )}
                         {visibleFields.has('category') && (
-                            <div className="space-y-1 sm:col-span-2">
+                            <div className="space-y-2 sm:col-span-2">
                                 <Label>{getFieldLabel('category')} *</Label>
-                                {renderLocaleInputs('category', true)}
+                                <Select
+                                    value={
+                                        data.category?.en
+                                            ? oilCategories.find((c) => c.name.en === data.category.en)?.id.toString() ?? ''
+                                            : ''
+                                    }
+                                    onValueChange={(value) => {
+                                        const cat = oilCategories.find((c) => c.id.toString() === value);
+                                        if (cat) {
+                                            setData('category', { ...cat.name });
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('field.select_category')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {oilCategories.map((cat) => (
+                                            <SelectItem key={cat.id} value={cat.id.toString()}>
+                                                {cat.name?.[locale] ?? cat.slug}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 {errors.category && <p className="text-sm text-destructive">{errors.category}</p>}
                             </div>
                         )}

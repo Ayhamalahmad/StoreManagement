@@ -141,6 +141,7 @@ const translations: Record<Locale, Record<string, string>> = {
         'field.slug': 'Slug',
         'field.fragrance_categories': 'Fragrance Categories',
         'field.seasons': 'Seasons',
+        'field.select_category': 'Select a category',
         'field.image_choose': 'Choose File',
         'field.image_keep': 'Current image will be kept',
         'field.image_none': 'No file chosen',
@@ -182,6 +183,7 @@ const translations: Record<Locale, Record<string, string>> = {
         'sillage_level.update': 'Update',
         'sillage_level.delete_confirm': 'Are you sure you want to delete "{name}"?',
         'field.sillage_levels': 'Sillage Levels',
+        'field.select_category': 'Select a category',
     },
     tr: {
         'nav.perfumes': 'Parfümler',
@@ -355,6 +357,7 @@ const translations: Record<Locale, Record<string, string>> = {
         'sillage_level.update': 'Güncelle',
         'sillage_level.delete_confirm': '"{name}" silmek istediğinize emin misiniz?',
         'field.sillage_levels': 'Fark Edilirlik Seviyeleri',
+        'field.select_category': 'Kategori Seç',
     },
     ar: {
         'nav.perfumes': 'العطور',
@@ -528,6 +531,7 @@ const translations: Record<Locale, Record<string, string>> = {
         'sillage_level.update': 'تحديث',
         'sillage_level.delete_confirm': 'هل أنت متأكد من حذف "{name}"؟',
         'field.sillage_levels': 'مستويات الانتشار',
+        'field.select_category': 'اختر فئة',
     },
 };
 

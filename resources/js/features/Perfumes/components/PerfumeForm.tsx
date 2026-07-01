@@ -1,11 +1,11 @@
 import { useForm } from '@inertiajs/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Upload } from 'lucide-react';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
+import { Upload, ChevronDown } from 'lucide-react';
 import { type FormEventHandler, useEffect, useRef } from 'react';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/types';
@@ -204,10 +204,19 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                         {visibleFields.has('fragrance_categories') && (
                             <div className="space-y-2 sm:col-span-2">
                                 <Label>{t('field.fragrance_categories')}</Label>
-                                <div className="flex flex-wrap gap-3">
-                                    {fragranceCategories.map((cat) => (
-                                        <label key={cat.id} className="flex items-center gap-2 text-sm cursor-pointer">
-                                            <Checkbox
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-between">
+                                            {data.fragrance_category_ids.length > 0
+                                                ? `${data.fragrance_category_ids.length} selected`
+                                                : t('field.select_category')}
+                                            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full min-w-[var(--radix-dropdown-menu-trigger-width)]">
+                                        {fragranceCategories.map((cat) => (
+                                            <DropdownMenuCheckboxItem
+                                                key={cat.id}
                                                 checked={data.fragrance_category_ids.includes(cat.id)}
                                                 onCheckedChange={(checked) => {
                                                     setData('fragrance_category_ids',
@@ -216,24 +225,33 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                                                             : data.fragrance_category_ids.filter((id) => id !== cat.id)
                                                     );
                                                 }}
-                                            />
-                                            <div>
+                                                onSelect={(e) => e.preventDefault()}
+                                            >
                                                 <span>{cat.name?.[locale] ?? cat.slug}</span>
-                                                <Badge variant="outline" className="ml-1 text-xs">{cat.type}</Badge>
-                                            </div>
-                                        </label>
-                                    ))}
-                                </div>
+                                                <Badge variant="outline" className="ml-2 text-xs">{cat.type}</Badge>
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                                 {errors.fragrance_category_ids && <p className="text-sm text-destructive">{errors.fragrance_category_ids}</p>}
                             </div>
                         )}
                         {visibleFields.has('sillage_levels') && sillageLevels.length > 0 && (
                             <div className="space-y-2 sm:col-span-2">
                                 <Label>{t('field.sillage_levels')}</Label>
-                                <div className="flex flex-wrap gap-3">
-                                    {sillageLevels.map((level) => (
-                                        <label key={level.id} className="flex items-center gap-2 text-sm cursor-pointer">
-                                            <Checkbox
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-between">
+                                            {data.sillage_level_ids.length > 0
+                                                ? `${data.sillage_level_ids.length} selected`
+                                                : t('field.select_category')}
+                                            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full min-w-[var(--radix-dropdown-menu-trigger-width)]">
+                                        {sillageLevels.map((level) => (
+                                            <DropdownMenuCheckboxItem
+                                                key={level.id}
                                                 checked={data.sillage_level_ids.includes(level.id)}
                                                 onCheckedChange={(checked) => {
                                                     setData('sillage_level_ids',
@@ -242,21 +260,32 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                                                             : data.sillage_level_ids.filter((id) => id !== level.id)
                                                     );
                                                 }}
-                                            />
-                                            <span>{level.name?.[locale] ?? level.slug}</span>
-                                        </label>
-                                    ))}
-                                </div>
+                                                onSelect={(e) => e.preventDefault()}
+                                            >
+                                                {level.name?.[locale] ?? level.slug}
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                                 {errors.sillage_level_ids && <p className="text-sm text-destructive">{errors.sillage_level_ids}</p>}
                             </div>
                         )}
                         {visibleFields.has('seasons') && (
                             <div className="space-y-2 sm:col-span-2">
                                 <Label>{t('field.seasons')}</Label>
-                                <div className="flex flex-wrap gap-3">
-                                    {seasons.map((season) => (
-                                        <label key={season.id} className="flex items-center gap-2 text-sm cursor-pointer">
-                                            <Checkbox
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="outline" className="w-full justify-between">
+                                            {data.season_ids.length > 0
+                                                ? `${data.season_ids.length} selected`
+                                                : t('field.select_category')}
+                                            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full min-w-[var(--radix-dropdown-menu-trigger-width)]">
+                                        {seasons.map((season) => (
+                                            <DropdownMenuCheckboxItem
+                                                key={season.id}
                                                 checked={data.season_ids.includes(season.id)}
                                                 onCheckedChange={(checked) => {
                                                     setData('season_ids',
@@ -265,11 +294,13 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                                                             : data.season_ids.filter((id) => id !== season.id)
                                                     );
                                                 }}
-                                            />
-                                            <span>{season.name?.[locale] ?? season.slug}</span>
-                                        </label>
-                                    ))}
-                                </div>
+                                                onSelect={(e) => e.preventDefault()}
+                                            >
+                                                {season.name?.[locale] ?? season.slug}
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                                 {errors.season_ids && <p className="text-sm text-destructive">{errors.season_ids}</p>}
                             </div>
                         )}

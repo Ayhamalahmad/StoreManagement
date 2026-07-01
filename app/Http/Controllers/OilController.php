@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOilRequest;
 use App\Http\Requests\UpdateOilRequest;
+use App\Models\FragranceCategory;
 use App\Models\Oil;
 use App\Services\OilService;
 use Inertia\Inertia;
@@ -15,18 +16,22 @@ class OilController extends Controller
     public function index()
     {
         $oils = $this->oilService->getAll();
+        $fragranceCategories = FragranceCategory::all();
 
         return Inertia::render('oils/manage', [
             'oils' => $oils,
+            'fragranceCategories' => $fragranceCategories,
         ]);
     }
 
     public function browse()
     {
         $oils = $this->oilService->getBrowseData();
+        $fragranceCategories = FragranceCategory::all();
 
         return Inertia::render('oils/index', [
             'oils' => $oils,
+            'fragranceCategories' => $fragranceCategories,
         ]);
     }
 
