@@ -29,8 +29,7 @@ export default function PerfumeShow({ perfume }: PageProps) {
     );
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={perfume.name?.[locale] ?? perfume.code} />
+
             <div className="container mx-auto space-y-6 p-6">
                 <div className="flex items-center gap-4">
                     <Link href={route('perfumes.index')}>
@@ -146,6 +145,5 @@ export default function PerfumeShow({ perfume }: PageProps) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
     );
 }
