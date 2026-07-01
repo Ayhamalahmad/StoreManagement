@@ -21,10 +21,13 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export type Locale = 'en' | 'tr' | 'ar';
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    locale?: Locale;
     [key: string]: unknown;
 }
 

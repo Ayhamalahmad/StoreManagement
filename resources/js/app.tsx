@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { route as routeFn } from 'ziggy-js';
 import { initializeTheme } from './hooks/use-appearance';
+import { LanguageProvider } from './hooks/use-language';
 
 declare global {
     const route: typeof routeFn;
@@ -18,12 +19,15 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <LanguageProvider>
+                <App {...props} />
+            </LanguageProvider>,
+        );
     },
     progress: {
         color: '#4B5563',
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();
