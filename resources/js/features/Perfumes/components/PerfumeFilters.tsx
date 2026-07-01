@@ -1,10 +1,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useLanguage } from '@/hooks/use-language';
-import { Search } from 'lucide-react';
+import { useLanguage, type Locale } from '@/hooks/use-language';
+import { Check, Globe, Search } from 'lucide-react';
 
 interface Props {
     search: string;
@@ -16,7 +17,13 @@ interface Props {
 const genderTabValues = ['all', 'erkek', 'kadin', 'unisex', 'niche', 'oil'];
 
 export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange }: Props) {
-    const { t } = useLanguage();
+    const { t, locale, setLocale } = useLanguage();
+
+    const locales: { value: Locale; label: string }[] = [
+        { value: 'en', label: 'English' },
+        { value: 'tr', label: 'Türkçe' },
+        { value: 'ar', label: 'العربية' },
+    ];
 
     return (
         <div className="sticky top-0 z-10 space-y-3 bg-background pb-2">
@@ -33,6 +40,21 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
                             />
                         </div>
                         <Button>{t('perfume.search_btn')}</Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon" className="h-9 w-9 shrink-0">
+                                    <Globe className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                {locales.map((l) => (
+                                    <DropdownMenuItem key={l.value} onClick={() => setLocale(l.value)}>
+                                        {locale === l.value && <Check className="mr-2 h-4 w-4" />}
+                                        <span className={locale === l.value ? '' : 'ml-6'}>{l.label}</span>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </CardContent>
             </Card>
