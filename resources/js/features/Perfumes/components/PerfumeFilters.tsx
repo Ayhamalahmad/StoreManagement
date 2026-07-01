@@ -1,11 +1,10 @@
-import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Select, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
+import { Search } from 'lucide-react';
 
 interface Props {
     search: string;
@@ -20,7 +19,7 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
     const { t } = useLanguage();
 
     return (
-        <>
+        <div className="sticky top-0 z-10 space-y-3 bg-background pb-2">
             <Card>
                 <CardContent className="p-4">
                     <div className="flex gap-3">
@@ -63,8 +62,6 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
                     ❄️ {t('perfume.filter_winter')}
                 </Badge>
             </div>
-
-          
-        </>
+        </div>
     );
 }
