@@ -11,15 +11,17 @@ import { PerfumeCard, PerfumeFilters } from '@/features/Perfumes';
 import type { Perfume } from '@/features/Perfumes/types';
 import type { Season } from '@/features/Seasons/types';
 import type { FragranceCategory } from '@/features/FragranceCategories/types';
+import type { SillageLevel } from '@/features/SillageLevels/types';
 
 interface PageProps {
     perfumes: Perfume[];
     seasons: Season[];
     fragranceCategories: FragranceCategory[];
+    sillageLevels: SillageLevel[];
 }
 
 export default function PerfumesIndex() {
-    const { perfumes, seasons, fragranceCategories } = usePage<PageProps>().props;
+    const { perfumes, seasons, fragranceCategories, sillageLevels } = usePage<PageProps>().props;
     const { t } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('perfume.browse'), href: '/perfumes' },

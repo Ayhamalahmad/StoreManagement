@@ -83,6 +83,7 @@ export default function PerfumeShow({ perfume }: PageProps) {
                                 <DetailRow label={t('field.seasons')} value={perfume.seasons?.map((s) => s.name?.[locale]).filter(Boolean).join(', ') ?? null} />
                                 <DetailRow label={t('field.concentration')} value={perfume.concentration?.[locale] ?? null} />
                                 <DetailRow label={t('field.sillage')} value={perfume.sillage?.[locale] ?? null} />
+                                <DetailRow label={t('field.sillage_levels')} value={perfume.sillage_levels?.map((l) => l.name?.[locale]).filter(Boolean).join(', ') ?? null} />
                             </CardContent>
                         </Card>
 

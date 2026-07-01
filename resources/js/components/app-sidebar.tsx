@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, FlaskConical, Settings2, Droplets, Sun, Tags } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, FlaskConical, Settings2, Droplets, Sun, Tags, Gauge } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -42,6 +42,11 @@ const mainNavItems: NavItem[] = [
         title: 'Fragrance Categories',
         url: '/fragrance-categories',
         icon: Tags,
+    },
+    {
+        title: 'Sillage Levels',
+        url: '/sillage-levels',
+        icon: Gauge,
     },
 ];
 

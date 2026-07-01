@@ -4,6 +4,7 @@ use App\Http\Controllers\FragranceCategoryController;
 use App\Http\Controllers\OilController;
 use App\Http\Controllers\PerfumeController;
 use App\Http\Controllers\SeasonController;
+use App\Http\Controllers\SillageLevelController;
 use App\Models\Oil;
 use App\Models\Perfume;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('fragrance-categories', [FragranceCategoryController::class, 'store'])->name('fragrance-categories.store');
     Route::put('fragrance-categories/{fragranceCategory}', [FragranceCategoryController::class, 'update'])->name('fragrance-categories.update');
     Route::delete('fragrance-categories/{fragranceCategory}', [FragranceCategoryController::class, 'destroy'])->name('fragrance-categories.destroy');
+
+    Route::get('sillage-levels', [SillageLevelController::class, 'index'])->name('sillage-levels.index');
+    Route::post('sillage-levels', [SillageLevelController::class, 'store'])->name('sillage-levels.store');
+    Route::put('sillage-levels/{sillageLevel}', [SillageLevelController::class, 'update'])->name('sillage-levels.update');
+    Route::delete('sillage-levels/{sillageLevel}', [SillageLevelController::class, 'destroy'])->name('sillage-levels.destroy');
 });
 
 require __DIR__.'/settings.php';

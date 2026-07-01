@@ -1,5 +1,6 @@
 import type { Season } from '@/features/Seasons/types';
 import type { FragranceCategory } from '@/features/FragranceCategories/types';
+import type { SillageLevel } from '@/features/SillageLevels/types';
 
 export interface Perfume {
     id: number;
@@ -10,6 +11,7 @@ export interface Perfume {
     image_url: string | null;
     seasons: Season[];
     fragrance_categories: FragranceCategory[];
+    sillage_levels: SillageLevel[];
     family: Record<string, string> | null;
     shelf: string | null;
     section: string | null;
@@ -43,4 +45,5 @@ export interface PerfumeFormData {
     price: string;
     season_ids: number[];
     fragrance_category_ids: number[];
+    sillage_level_ids: number[];
 }

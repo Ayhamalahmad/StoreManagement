@@ -12,6 +12,7 @@ import type { Locale } from '@/types';
 import type { Perfume, PerfumeFormData } from '../types';
 import type { Season } from '@/features/Seasons/types';
 import type { FragranceCategory } from '@/features/FragranceCategories/types';
+import type { SillageLevel } from '@/features/SillageLevels/types';
 
 interface Props {
     open: boolean;
@@ -20,15 +21,16 @@ interface Props {
     visibleFields: Set<string>;
     seasons: Season[];
     fragranceCategories: FragranceCategory[];
+    sillageLevels: SillageLevel[];
 }
 
-const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
+const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'sillage_levels', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
 
 const localeFlags: Record<Locale, string> = { en: 'EN', tr: 'TR', ar: 'AR' };
 const locales: Locale[] = ['en', 'tr', 'ar'];
 const makeLocaleObj = (): Record<string, string> => ({ en: '', tr: '', ar: '' });
 
-export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields, seasons, fragranceCategories }: Props) {
+export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields, seasons, fragranceCategories, sillageLevels }: Props) {
     const { t, locale } = useLanguage();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,6 +53,7 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
         price: '',
         season_ids: [],
         fragrance_category_ids: [],
+        sillage_level_ids: [],
     });
 
     useEffect(() => {
@@ -74,6 +77,7 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                 price: editingPerfume.price?.toString() ?? '',
                 season_ids: editingPerfume.seasons?.map((s) => s.id) ?? [],
                 fragrance_category_ids: editingPerfume.fragrance_categories?.map((c) => c.id) ?? [],
+                sillage_level_ids: editingPerfume.sillage_levels?.map((l) => l.id) ?? [],
             });
         } else if (open) {
             reset();
@@ -221,6 +225,29 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                                     ))}
                                 </div>
                                 {errors.fragrance_category_ids && <p className="text-sm text-destructive">{errors.fragrance_category_ids}</p>}
+                            </div>
+                        )}
+                        {visibleFields.has('sillage_levels') && sillageLevels.length > 0 && (
+                            <div className="space-y-2 sm:col-span-2">
+                                <Label>{t('field.sillage_levels')}</Label>
+                                <div className="flex flex-wrap gap-3">
+                                    {sillageLevels.map((level) => (
+                                        <label key={level.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                                            <Checkbox
+                                                checked={data.sillage_level_ids.includes(level.id)}
+                                                onCheckedChange={(checked) => {
+                                                    setData('sillage_level_ids',
+                                                        checked
+                                                            ? [...data.sillage_level_ids, level.id]
+                                                            : data.sillage_level_ids.filter((id) => id !== level.id)
+                                                    );
+                                                }}
+                                            />
+                                            <span>{level.name?.[locale] ?? level.slug}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.sillage_level_ids && <p className="text-sm text-destructive">{errors.sillage_level_ids}</p>}
                             </div>
                         )}
                         {visibleFields.has('seasons') && (

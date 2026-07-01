@@ -27,7 +27,7 @@ export function PerfumeTable({ perfumes, visibleFields, onEdit, onDelete }: Prop
                             <tr className="border-b text-left text-muted-foreground">
                                 <th className="px-4 py-3 font-medium">{t('field.code')}</th>
                                 <th className="px-4 py-3 font-medium">{t('field.name')}</th>
-                                {['top_notes', 'middle_notes', 'base_notes', 'fragrance_categories', 'family', 'section', 'shelf', 'seasons', 'concentration', 'sillage', 'price', 'warehouse'].filter((f) => visibleFields.has(f)).map((field) => (
+                                {['top_notes', 'middle_notes', 'base_notes', 'fragrance_categories', 'family', 'section', 'shelf', 'seasons', 'concentration', 'sillage', 'sillage_levels', 'price', 'warehouse'].filter((f) => visibleFields.has(f)).map((field) => (
                                     <th key={field} className="px-4 py-3 font-medium">{t(`field.${field}`)}</th>
                                 ))}
                                 <th className="px-4 py-3 font-medium text-right">{t('perfume.manage')}</th>
@@ -67,6 +67,11 @@ export function PerfumeTable({ perfumes, visibleFields, onEdit, onDelete }: Prop
                                         )}
                                         {visibleFields.has('concentration') && <td className="px-4 py-3 text-muted-foreground">{perfume.concentration?.[locale] || '-'}</td>}
                                         {visibleFields.has('sillage') && <td className="px-4 py-3 text-muted-foreground">{perfume.sillage?.[locale] || '-'}</td>}
+                                        {visibleFields.has('sillage_levels') && (
+                                            <td className="px-4 py-3">
+                                                {perfume.sillage_levels?.map((l) => l.name?.[locale]).filter(Boolean).join(', ') || '-'}
+                                            </td>
+                                        )}
                                         {visibleFields.has('price') && <td className="px-4 py-3 text-muted-foreground">{perfume.price != null ? `$${perfume.price}` : '-'}</td>}
                                         {visibleFields.has('warehouse') && <td className="px-4 py-3 text-muted-foreground">{perfume.warehouse || '-'}</td>}
                                         <td className="px-4 py-3 text-right">

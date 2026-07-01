@@ -61,6 +61,8 @@ class StorePerfumeRequest extends FormRequest
             'season_ids.*' => 'exists:seasons,id',
             'fragrance_category_ids' => 'nullable|array',
             'fragrance_category_ids.*' => 'exists:fragrance_categories,id',
+            'sillage_level_ids' => 'nullable|array',
+            'sillage_level_ids.*' => 'exists:sillage_levels,id',
         ];
     }
 }

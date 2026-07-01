@@ -66,4 +66,9 @@ class Perfume extends Model
     {
         return $this->belongsToMany(FragranceCategory::class);
     }
+
+    public function sillageLevels(): BelongsToMany
+    {
+        return $this->belongsToMany(SillageLevel::class);
+    }
 }

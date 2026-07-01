@@ -13,18 +13,20 @@ import { PerfumeStats, PerfumeTable, PerfumeForm } from '@/features/Perfumes';
 import type { Perfume } from '@/features/Perfumes/types';
 import type { Season } from '@/features/Seasons/types';
 import type { FragranceCategory } from '@/features/FragranceCategories/types';
+import type { SillageLevel } from '@/features/SillageLevels/types';
 
 interface PageProps {
     perfumes: Perfume[];
     seasons: Season[];
     fragranceCategories: FragranceCategory[];
+    sillageLevels: SillageLevel[];
     [key: string]: unknown;
 }
 
-const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
+const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'sillage_levels', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
 
 export default function PerfumesManage() {
-    const { perfumes, seasons, fragranceCategories } = usePage<PageProps>().props;
+    const { perfumes, seasons, fragranceCategories, sillageLevels } = usePage<PageProps>().props;
     const { t, locale } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.perfumes'), href: '/perfumes' },
@@ -76,6 +78,7 @@ export default function PerfumesManage() {
             ...Object.values(p.sillage ?? {}),
             ...(p.seasons?.flatMap((s) => Object.values(s.name ?? {})) ?? []),
             ...(p.fragrance_categories?.flatMap((c) => Object.values(c.name ?? {})) ?? []),
+            ...(p.sillage_levels?.flatMap((l) => Object.values(l.name ?? {})) ?? []),
         ];
         return searchable.some((val) => val?.toLowerCase().includes(searchStr));
     });
@@ -143,6 +146,7 @@ export default function PerfumesManage() {
                 visibleFields={visibleFields}
                 seasons={seasons}
                 fragranceCategories={fragranceCategories}
+                sillageLevels={sillageLevels}
             />
 
             <Dialog open={!!deletingPerfume} onOpenChange={(o) => !o && setDeletingPerfume(null)}>
