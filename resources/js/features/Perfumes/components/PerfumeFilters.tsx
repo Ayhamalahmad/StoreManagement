@@ -64,31 +64,7 @@ export function PerfumeFilters({ search, onSearchChange, activeTab, onTabChange 
                 </Badge>
             </div>
 
-            <Card>
-                <CardContent className="grid gap-4 p-4 md:grid-cols-5">
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder={t('perfume.gender')} />
-                        </SelectTrigger>
-                    </Select>
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder={t('perfume.family')} />
-                        </SelectTrigger>
-                    </Select>
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder={t('perfume.shelf')} />
-                        </SelectTrigger>
-                    </Select>
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder={t('perfume.section')} />
-                        </SelectTrigger>
-                    </Select>
-                    <Button variant="outline">{t('perfume.clear_filters')}</Button>
-                </CardContent>
-            </Card>
+          
         </>
     );
 }

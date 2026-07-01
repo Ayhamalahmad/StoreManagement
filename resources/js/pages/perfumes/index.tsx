@@ -36,18 +36,9 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={t('perfume.browse')} />
+
             <div className="container mx-auto space-y-6 p-6">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold">{t('perfume.browse')}</h1>
-                        <p className="text-muted-foreground">{t('perfume.browse.desc')}</p>
-                    </div>
-                    <Link href={route('perfumes.manage')}>
-                        <Button>{t('perfume.add_btn')}</Button>
-                    </Link>
-                </div>
+
 
                 <PerfumeFilters
                     search={search}
@@ -56,32 +47,7 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
                     onTabChange={setActiveTab}
                 />
 
-                <div className="grid gap-4 md:grid-cols-4">
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-3xl font-bold">{stats.total}</p>
-                            <p className="text-muted-foreground">{t('perfume.total_count')}</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-3xl font-bold">{stats.men}</p>
-                            <p className="text-muted-foreground">{t('perfume.men_count')}</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-3xl font-bold">{stats.women}</p>
-                            <p className="text-muted-foreground">{t('perfume.women_count')}</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <p className="text-3xl font-bold">{stats.niche}</p>
-                            <p className="text-muted-foreground">{t('perfume.niche_count')}</p>
-                        </CardContent>
-                    </Card>
-                </div>
+                
 
                 <div className="flex items-center justify-between">
                     <p className="text-muted-foreground text-sm">
@@ -116,6 +82,5 @@ export default function PerfumesIndex({ perfumes }: PageProps) {
                     </Button>
                 </div>
             </div>
-        </AppLayout>
     );
 }
