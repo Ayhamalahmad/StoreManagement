@@ -236,7 +236,7 @@ export function PerfumeForm({ open, onOpenChange, editingPerfume, visibleFields,
                                 {errors.fragrance_category_ids && <p className="text-sm text-destructive">{errors.fragrance_category_ids}</p>}
                             </div>
                         )}
-                        {visibleFields.has('sillage_levels') && sillageLevels.length > 0 && (
+                        {visibleFields.has('sillage_levels') && (
                             <div className="space-y-2 sm:col-span-2">
                                 <Label>{t('field.sillage_levels')}</Label>
                                 <DropdownMenu>

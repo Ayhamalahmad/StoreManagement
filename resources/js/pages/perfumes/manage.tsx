@@ -40,7 +40,9 @@ export default function PerfumesManage() {
 
     const [visibleFields, setVisibleFields] = useState<Set<string>>(() => {
         const saved = localStorage.getItem('perfumeVisibleFields');
-        return saved ? new Set(JSON.parse(saved)) : new Set(fieldKeys);
+        const base = saved ? new Set(JSON.parse(saved)) : new Set();
+        fieldKeys.forEach((k) => base.add(k));
+        return base;
     });
     const [showFieldPanel, setShowFieldPanel] = useState(false);
 
