@@ -17,7 +17,7 @@ export function PerfumeCard({ perfume, onViewDetails }: Props) {
         <Card className="overflow-hidden transition-all hover:-translate-y-1 hover:shadow-lg">
             <div className="aspect-square bg-muted">
                 <img
-                    src={perfume.image_url ?? '/placeholder.png'}
+                    src={perfume.image_url}
                     alt={perfume.name?.[locale] ?? ''}
                     className="h-full w-full object-contain p-6"
                 />

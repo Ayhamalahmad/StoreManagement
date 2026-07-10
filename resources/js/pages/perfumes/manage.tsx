@@ -17,6 +17,12 @@ import type { SillageLevel } from '@/features/SillageLevels/types';
 
 interface PageProps {
     perfumes: Perfume[];
+    stats: {
+        total: number;
+        men: number;
+        women: number;
+        niche: number;
+    };
     seasons: Season[];
     fragranceCategories: FragranceCategory[];
     sillageLevels: SillageLevel[];
@@ -26,7 +32,7 @@ interface PageProps {
 const fieldKeys = ['name', 'code', 'original_perfume', 'image', 'family', 'shelf', 'section', 'seasons', 'fragrance_categories', 'sillage_levels', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'warehouse', 'concentration', 'sillage', 'price'];
 
 export default function PerfumesManage() {
-    const { perfumes, seasons, fragranceCategories, sillageLevels } = usePage<PageProps>().props;
+    const { perfumes, stats, seasons, fragranceCategories, sillageLevels } = usePage<PageProps>().props;
     const { t, locale } = useLanguage();
     const breadcrumbs: BreadcrumbItem[] = [
         { title: t('nav.perfumes'), href: '/perfumes' },
@@ -117,7 +123,7 @@ export default function PerfumesManage() {
                     </div>
                 </div>
 
-                <PerfumeStats perfumes={perfumes} />
+                <PerfumeStats stats={stats} />
 
                 <Card>
                     <CardContent className="p-4">

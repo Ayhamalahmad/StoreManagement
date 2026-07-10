@@ -18,12 +18,14 @@ class PerfumeController extends Controller
     public function index()
     {
         $perfumes = $this->perfumeService->getAll();
+        $stats = $this->perfumeService->getStats();
         $seasons = Season::all();
         $fragranceCategories = FragranceCategory::all();
         $sillageLevels = SillageLevel::all();
 
         return Inertia::render('perfumes/manage', [
             'perfumes' => $perfumes,
+            'stats' => $stats,
             'seasons' => $seasons,
             'fragranceCategories' => $fragranceCategories,
             'sillageLevels' => $sillageLevels,
@@ -33,12 +35,14 @@ class PerfumeController extends Controller
     public function browse()
     {
         $perfumes = $this->perfumeService->getBrowseData();
+        $stats = $this->perfumeService->getStats();
         $seasons = Season::all();
         $fragranceCategories = FragranceCategory::all();
         $sillageLevels = SillageLevel::all();
 
         return Inertia::render('perfumes/index', [
             'perfumes' => $perfumes,
+            'stats' => $stats,
             'seasons' => $seasons,
             'fragranceCategories' => $fragranceCategories,
             'sillageLevels' => $sillageLevels,

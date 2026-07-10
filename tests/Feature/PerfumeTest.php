@@ -26,6 +26,7 @@ test('authenticated users can view perfumes manage page', function () {
         ->assertInertia(fn ($page) => $page
             ->component('perfumes/manage')
             ->has('perfumes', 3)
+            ->has('stats')
         );
 });
 
@@ -36,7 +37,8 @@ test('authenticated users can view perfumes browse page', function () {
         ->get(route('perfumes.index'))
         ->assertInertia(fn ($page) => $page
             ->component('perfumes/index')
-            ->has('perfumes', 3)
+            ->has('perfumes')
+            ->has('stats')
         );
 });
 

@@ -48,10 +48,10 @@ class Perfume extends Model
         ];
     }
 
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
         if (!$this->image) {
-            return null;
+            return '/placeholder.png';
         }
 
         return Storage::disk('public')->url($this->image);

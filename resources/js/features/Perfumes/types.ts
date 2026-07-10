@@ -8,7 +8,7 @@ export interface Perfume {
     code: string;
     original_perfume: Record<string, string> | null;
     image: string | null;
-    image_url: string | null;
+    image_url: string;
     seasons: Season[];
     fragrance_categories: FragranceCategory[];
     sillage_levels: SillageLevel[];

@@ -103,7 +103,15 @@ class PerfumeSeeder extends Seeder
             'Unisex' => 'unisex',
         ];
 
+        $multilingualFields = ['name', 'original_perfume', 'family', 'notes', 'top_notes', 'middle_notes', 'base_notes', 'concentration', 'sillage'];
+
         foreach ($perfumes as $perfume) {
+            foreach ($multilingualFields as $field) {
+                if (isset($perfume[$field]) && is_string($perfume[$field])) {
+                    $perfume[$field] = ['en' => $perfume[$field], 'ar' => $perfume[$field]];
+                }
+            }
+
             $seasonSlug = $seasonMap[$perfume['season']] ?? null;
             $genderSlug = $genderMap[$perfume['gender']] ?? null;
             unset($perfume['gender'], $perfume['season']);

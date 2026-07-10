@@ -50,7 +50,7 @@ export default function PerfumeShow({ perfume }: PageProps) {
                             <CardContent className="p-6">
                                 <div className="aspect-square rounded-lg bg-muted">
                                     <img
-                                        src={perfume.image_url ?? '/placeholder.png'}
+                                        src={perfume.image_url}
                                         alt={perfume.name?.[locale] ?? ''}
                                         className="h-full w-full object-contain p-6"
                                     />

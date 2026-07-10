@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\FragranceCategory;
 use App\Models\Perfume;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,25 @@ class PerfumeService
 
     public function getBrowseData()
     {
-        return Perfume::with(['seasons', 'fragranceCategories', 'sillageLevels'])->orderBy('created_at', 'desc')->get();
+        return Perfume::with(['seasons', 'fragranceCategories', 'sillageLevels'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+    }
+
+    public function getStats(): array
+    {
+        $total = Perfume::count();
+        $men = Perfume::whereHas('fragranceCategories', function ($q) {
+            $q->where('slug', 'erkek');
+        })->count();
+        $women = Perfume::whereHas('fragranceCategories', function ($q) {
+            $q->where('slug', 'kadin');
+        })->count();
+        $niche = Perfume::whereHas('fragranceCategories', function ($q) {
+            $q->where('type', 'niche');
+        })->count();
+
+        return compact('total', 'men', 'women', 'niche');
     }
 
     public function create(array $data, ?UploadedFile $image = null): Perfume

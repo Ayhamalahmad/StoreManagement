@@ -1,26 +1,19 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/hooks/use-language';
-import type { Perfume } from '../types';
 
-interface Props {
-    perfumes: Perfume[];
+interface Stats {
+    total: number;
+    men: number;
+    women: number;
+    niche: number;
 }
 
-export function PerfumeStats({ perfumes }: Props) {
-    const { t } = useLanguage();
+interface Props {
+    stats: Stats;
+}
 
-    const stats = {
-        total: perfumes.length,
-        men: perfumes.filter((p) =>
-            p.fragrance_categories?.some((c) => /erkek|male|ذكر/i.test(c.slug ?? '') || /erkek|male|ذكر/i.test(Object.values(c.name ?? {}).join(' ')))
-        ).length,
-        women: perfumes.filter((p) =>
-            p.fragrance_categories?.some((c) => /kadin|female|أنثى/i.test(c.slug ?? '') || /kadın|female|أنثى/i.test(Object.values(c.name ?? {}).join(' ')))
-        ).length,
-        niche: perfumes.filter((p) =>
-            p.fragrance_categories?.some((c) => c.type === 'niche')
-        ).length,
-    };
+export function PerfumeStats({ stats }: Props) {
+    const { t } = useLanguage();
 
     return (
         <div className="grid gap-4 md:grid-cols-4">
